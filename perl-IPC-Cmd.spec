@@ -3,8 +3,8 @@
 Name:           %{?scl_prefix}perl-IPC-Cmd
 # Epoch to compete with perl.spec
 Epoch:          1
-Version:        0.94
-Release:        5%{?dist}
+Version:        0.96
+Release:        1%{?dist}
 Summary:        Finding and running system commands made easy
 License:        GPL+ or Artistic
 Group:          Development/Libraries
@@ -12,7 +12,7 @@ URL:            http://search.cpan.org/dist/IPC-Cmd/
 Source0:        http://www.cpan.org/authors/id/B/BI/BINGOS/IPC-Cmd-%{version}.tar.gz
 # Replace ExtUtils::MakeMaker dependency with ExtUtils::MM::Utils.
 # This allows not to require perl-devel. Bug #1129443
-Patch0:         IPC-Cmd-0.94-Replace-EU-MM-dependnecy-with-EU-MM-Utils.patch
+Patch0:         IPC-Cmd-0.96-Replace-EU-MM-dependency-with-EU-MM-Utils.patch
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils
@@ -33,7 +33,7 @@ BuildRequires:  %{?scl_prefix}perl(IO::Select)
 BuildRequires:  %{?scl_prefix}perl(IPC::Open3)
 BuildRequires:  %{?scl_prefix}perl(IPC::Run) >= 0.55
 BuildRequires:  %{?scl_prefix}perl(Locale::Maketext::Simple)
-BuildRequires:  %{?scl_prefix}perl(Module::Load::Conditional)
+BuildRequires:  %{?scl_prefix}perl(Module::Load::Conditional) >= 0.66
 BuildRequires:  %{?scl_prefix}perl(Params::Check) >= 0.20
 BuildRequires:  %{?scl_prefix}perl(POSIX)
 BuildRequires:  %{?scl_prefix}perl(Socket)
@@ -56,6 +56,7 @@ Requires:       %{?scl_prefix}perl(FileHandle)
 Requires:       %{?scl_prefix}perl(IO::Handle)
 Requires:       %{?scl_prefix}perl(IO::Select)
 Requires:       %{?scl_prefix}perl(IPC::Open3)
+Requires:       %{?scl_prefix}perl(Module::Load::Conditional) >= 0.66
 Requires:       %{?scl_prefix}perl(Params::Check) >= 0.20
 Requires:       %{?scl_prefix}perl(POSIX)
 Requires:       %{?scl_prefix}perl(Socket)
@@ -65,11 +66,13 @@ Requires:       %{?scl_prefix}perl(Time::HiRes)
 %if 0%{?rhel} < 7
 # RPM 4.8 style
 %{?filter_setup:
+%filter_from_requires /^%{?scl_prefix}perl(Module::Load::Conditional)$/d
 %filter_from_requires /^%{?scl_prefix}perl(Params::Check)$/d
 %?perl_default_filter
 }
 %else
 # RPM 4.9 style
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^%{?scl_prefix}perl\\(Module::Load::Conditional\\)$
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^%{?scl_prefix}perl\\(Params::Check\\)$
 %endif
 
@@ -86,7 +89,7 @@ if desired, but have them still work.
 
 %install
 %{?scl:scl enable %{scl} '}make pure_install DESTDIR=$RPM_BUILD_ROOT%{?scl:'}
-find $RPM_BUILD_ROOT -type f -name .packlist -exec rm -f {} \;
+find $RPM_BUILD_ROOT -type f -name .packlist -delete
 %{_fixperms} $RPM_BUILD_ROOT
 
 %check
@@ -98,6 +101,13 @@ find $RPM_BUILD_ROOT -type f -name .packlist -exec rm -f {} \;
 %{_mandir}/man3/IPC::Cmd.3*
 
 %changelog
+* Thu Jul 28 2016 Paul Howarth <paul@city-fan.org> - 1:0.96-1
+- Update to 0.96
+  - Require Module::Load::Conditional 0.66 to resolve CVE-2016-1238
+    (avoid loading optional modules from default .)
+- Update patch for use of ExtUtils::MM::Utils
+- Simplify find command using -delete
+
 * Tue Jul 12 2016 Petr Pisar <ppisar@redhat.com> - 1:0.94-5
 - SCL
 
