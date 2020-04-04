@@ -32,7 +32,7 @@ diff --git a/lib/IPC/Cmd.pm b/lib/IPC/Cmd.pm
 index 13f3c6b..6191dc3 100644
 --- a/lib/IPC/Cmd.pm
 +++ b/lib/IPC/Cmd.pm
-@@ -232,7 +232,7 @@ sub can_run {
+@@ -233,7 +233,7 @@ sub can_run {
      }
  
      require File::Spec;

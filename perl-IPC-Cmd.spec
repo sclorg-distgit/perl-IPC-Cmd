@@ -9,7 +9,7 @@ Name:           %{?scl_prefix}perl-IPC-Cmd
 # Epoch to compete with perl.spec
 Epoch:          2
 Version:        1.04
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Finding and running system commands made easy
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/IPC-Cmd
@@ -97,6 +97,9 @@ if desired, but have them still work.
 %{_mandir}/man3/IPC::Cmd.3*
 
 %changelog
+* Tue Jan 14 2020 Jitka Plesnikova <jplesnik@redhat.com> - 2:1.04-4
+- Updated to prevent patch leftover
+
 * Fri Dec 20 2019 Jitka Plesnikova <jplesnik@redhat.com> - 2:1.04-3
 - SCL
 
